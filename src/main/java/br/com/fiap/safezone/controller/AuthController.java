@@ -1,0 +1,58 @@
+package br.com.fiap.safezone.controller;
+
+import br.com.fiap.safezone.dto.AuthDTO;
+import br.com.fiap.safezone.dto.RegisterDTO;
+import br.com.fiap.safezone.entity.Usuario;
+import br.com.fiap.safezone.repository.UsuarioRepository;
+import br.com.fiap.safezone.service.TokenService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/auth")
+public class AuthController {
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+    @Autowired
+    private TokenService tokenService;
+
+    @PostMapping("/login")
+    public ResponseEntity login(@RequestBody @Valid AuthDTO authDTO) {
+        // Gera um token do tipo UserPasswordAuthentication para esse usuário e senha
+        var userPwd = new UsernamePasswordAuthenticationToken(
+                authDTO.nome(),
+                authDTO.senha()
+        );
+        // Autentica o usuário
+        var auth = this.authenticationManager.authenticate(userPwd);
+        // Gera um token JWT
+        var token = tokenService.generateToken((Usuario) auth.getPrincipal());
+        return ResponseEntity.ok(token);
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity register(@RequestBody @Valid RegisterDTO registerDTO) {
+        if (usuarioRepository.findByLogin(registerDTO.nome()) != null) {
+            return ResponseEntity.badRequest().build();
+        }
+        String senhaCriptografada = new BCryptPasswordEncoder()
+                .encode(registerDTO.senha());
+        Usuario novoUsuario = new Usuario(
+                registerDTO.nome(),
+                senhaCriptografada,
+                registerDTO.email(),
+                registerDTO.role());
+        usuarioRepository.save(novoUsuario);
+        return ResponseEntity.ok().build();
+    }
+}
