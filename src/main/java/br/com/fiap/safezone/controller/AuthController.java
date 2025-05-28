@@ -30,7 +30,7 @@ public class AuthController {
     public ResponseEntity login(@RequestBody @Valid AuthDTO authDTO) {
         // Gera um token do tipo UserPasswordAuthentication para esse usuário e senha
         var userPwd = new UsernamePasswordAuthenticationToken(
-                authDTO.nome(),
+                authDTO.email(),
                 authDTO.senha()
         );
         // Autentica o usuário
@@ -42,15 +42,14 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Valid RegisterDTO registerDTO) {
-        if (usuarioRepository.findByLogin(registerDTO.nome()) != null) {
+        if (usuarioRepository.findByEmail(registerDTO.email()) != null) {
             return ResponseEntity.badRequest().build();
         }
         String senhaCriptografada = new BCryptPasswordEncoder()
                 .encode(registerDTO.senha());
         Usuario novoUsuario = new Usuario(
-                registerDTO.nome(),
-                senhaCriptografada,
                 registerDTO.email(),
+                senhaCriptografada,
                 registerDTO.role());
         usuarioRepository.save(novoUsuario);
         return ResponseEntity.ok().build();

@@ -1,9 +1,6 @@
 package br.com.fiap.safezone.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,11 +13,12 @@ import java.util.List;
 public class Usuario implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "usuario_seq")
+    @SequenceGenerator(name = "usuario_seq", sequenceName = "usuario_seq", allocationSize = 1)
     private Long id;
-    private String nome;
     private String senha;
     private String email;
+    @Enumerated(EnumType.STRING)
     private UserRole role;
 
     @Override
@@ -36,10 +34,9 @@ public class Usuario implements UserDetails {
     public Usuario() {
     }
 
-    public Usuario(String nome, String senha, String email, UserRole role) {
-        this.nome = nome;
-        this.senha = senha;
+    public Usuario(String email, String senha, UserRole role) {
         this.email = email;
+        this.senha = senha;
         this.role = role;
     }
 
@@ -52,7 +49,7 @@ public class Usuario implements UserDetails {
 
     @Override
     public String getUsername() {
-        return nome;
+        return email;
     }
 
     @Override
@@ -81,14 +78,6 @@ public class Usuario implements UserDetails {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
     }
 
     public String getSenha() {

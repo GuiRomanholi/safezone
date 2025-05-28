@@ -49,6 +49,4 @@ public class TokenService {
                 .plusMinutes(2)
                 .toInstant(ZoneOffset.of("-03:00"));
     }
-
-
 }
