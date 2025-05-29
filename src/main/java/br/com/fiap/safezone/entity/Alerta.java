@@ -8,12 +8,13 @@ import java.time.LocalDateTime;
 public class Alerta {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "alerta_seq")
+    @SequenceGenerator(name = "alerta_seq", sequenceName = "alerta_seq", allocationSize = 1)
     private Long id;
 
     private String tipo;
 
-    private String desc;
+    private String descricao;
 
     private LocalDateTime dataHora;
 
@@ -43,12 +44,12 @@ public class Alerta {
         this.tipo = tipo;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getDescricao() {
+        return descricao;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
     public LocalDateTime getDataHora() {
