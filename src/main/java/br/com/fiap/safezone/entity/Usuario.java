@@ -20,6 +20,8 @@ public class Usuario implements UserDetails {
     private String email;
     @Enumerated(EnumType.STRING)
     private UserRole role;
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Alerta> alertas;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -102,5 +104,13 @@ public class Usuario implements UserDetails {
 
     public void setRole(UserRole role) {
         this.role = role;
+    }
+
+    public List<Alerta> getAlertas() {
+        return alertas;
+    }
+
+    public void setAlertas(List<Alerta> alertas) {
+        this.alertas = alertas;
     }
 }
