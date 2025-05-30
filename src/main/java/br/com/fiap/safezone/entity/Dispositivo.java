@@ -1,5 +1,6 @@
 package br.com.fiap.safezone.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.util.List;
@@ -19,6 +20,7 @@ public class Dispositivo {
     private Boolean ativo;
 
     @OneToMany(mappedBy = "dispositivo", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Leitura> leituras;
 
     //Getters e Setters

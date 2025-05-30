@@ -20,8 +20,6 @@ public class UsuarioService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    // CRUD
-
     @Transactional
     @CachePut(value = "usuarios", key = "#result.id")
     public Usuario createUsuario(Usuario usuario) {

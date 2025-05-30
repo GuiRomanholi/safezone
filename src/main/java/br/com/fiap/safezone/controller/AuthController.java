@@ -28,14 +28,11 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AuthDTO authDTO) {
-        // Gera um token do tipo UserPasswordAuthentication para esse usuário e senha
         var userPwd = new UsernamePasswordAuthenticationToken(
                 authDTO.email(),
                 authDTO.senha()
         );
-        // Autentica o usuário
         var auth = this.authenticationManager.authenticate(userPwd);
-        // Gera um token JWT
         var token = tokenService.generateToken((Usuario) auth.getPrincipal());
         return ResponseEntity.ok(token);
     }

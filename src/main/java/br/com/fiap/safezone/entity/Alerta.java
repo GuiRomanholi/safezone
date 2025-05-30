@@ -1,5 +1,6 @@
 package br.com.fiap.safezone.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.time.LocalDateTime;
@@ -20,10 +21,12 @@ public class Alerta {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "leitura_id_lei")
+    @JsonBackReference
     private Leitura leitura;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "usuario_id_usu")
+    @JsonBackReference
     private Usuario usuario;
 
     //Getters e Setters

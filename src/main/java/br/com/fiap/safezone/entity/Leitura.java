@@ -1,5 +1,7 @@
 package br.com.fiap.safezone.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.time.LocalDateTime;
@@ -20,9 +22,11 @@ public class Leitura {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "dispositivo_id_disp")
+    @JsonBackReference
     private Dispositivo dispositivo;
 
     @OneToMany(mappedBy = "leitura", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Alerta> alertas;
 
     //Getters e Setters
