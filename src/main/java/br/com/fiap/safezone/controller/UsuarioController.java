@@ -1,7 +1,9 @@
 package br.com.fiap.safezone.controller;
 
 import br.com.fiap.safezone.dto.DispositivoResponse;
+import br.com.fiap.safezone.dto.UsuarioRequest;
 import br.com.fiap.safezone.entity.Dispositivo;
+import br.com.fiap.safezone.entity.UserRole;
 import br.com.fiap.safezone.entity.Usuario;
 import br.com.fiap.safezone.repository.UsuarioRepository;
 import io.swagger.v3.oas.annotations.Operation;
@@ -60,16 +62,17 @@ public class UsuarioController {
                     content = @Content(schema = @Schema()))
     })
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> update(@PathVariable Long id, @RequestBody @Valid Usuario usuarioAtualizado) {
-        Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
-        if (optionalUsuario.isEmpty()) return ResponseEntity.notFound().build();
+    public ResponseEntity<Usuario> update(@PathVariable Long id, @RequestBody UsuarioRequest request) {
+        Optional<Usuario> optional = usuarioRepository.findById(id);
+        if (optional.isEmpty()) return ResponseEntity.notFound().build();
 
-        Usuario usuario = optionalUsuario.get();
-        usuario.setEmail(usuarioAtualizado.getEmail());
-        usuario.setSenha(usuarioAtualizado.getSenha());
-        usuario.setRole(usuarioAtualizado.getRole());
+        Usuario usuario = optional.get();
+        usuario.setEmail(request.getEmail());
+        usuario.setSenha(request.getSenha());
+        usuario.setRole(UserRole.valueOf(request.getRole().toUpperCase()));
 
-        return ResponseEntity.ok(usuarioRepository.save(usuario));
+        usuarioRepository.save(usuario);
+        return ResponseEntity.ok(usuario);
     }
 
     @Operation(summary = "Exclui um usuario por ID")
