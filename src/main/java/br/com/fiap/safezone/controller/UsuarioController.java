@@ -6,6 +6,7 @@ import br.com.fiap.safezone.entity.Dispositivo;
 import br.com.fiap.safezone.entity.UserRole;
 import br.com.fiap.safezone.entity.Usuario;
 import br.com.fiap.safezone.repository.UsuarioRepository;
+import br.com.fiap.safezone.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -26,6 +27,8 @@ import java.util.Optional;
 public class UsuarioController {
 
     private final UsuarioRepository usuarioRepository;
+    @Autowired
+    private UsuarioService usuarioService;
 
     @Autowired
     public UsuarioController(UsuarioRepository usuarioRepository) {
@@ -62,17 +65,21 @@ public class UsuarioController {
                     content = @Content(schema = @Schema()))
     })
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> update(@PathVariable Long id, @RequestBody UsuarioRequest request) {
+    public ResponseEntity<Usuario> update(@PathVariable Long id, @RequestBody @Valid UsuarioRequest request) {
         Optional<Usuario> optional = usuarioRepository.findById(id);
         if (optional.isEmpty()) return ResponseEntity.notFound().build();
 
-        Usuario usuario = optional.get();
-        usuario.setEmail(request.getEmail());
-        usuario.setSenha(request.getSenha());
-        usuario.setRole(UserRole.valueOf(request.getRole().toUpperCase()));
+        Usuario usuarioExistente = optional.get();
 
-        usuarioRepository.save(usuario);
-        return ResponseEntity.ok(usuario);
+        // Atualiza os campos com os dados do request
+        usuarioExistente.setEmail(request.getEmail());
+        usuarioExistente.setSenha(request.getSenha()); // A criptografia será feita no service
+        usuarioExistente.setRole(UserRole.valueOf(request.getRole().toUpperCase()));
+
+        // Salva via service, que cuida do cache e da criptografia
+        Usuario atualizado = usuarioService.updateUsuario(id, usuarioExistente);
+
+        return ResponseEntity.ok(atualizado);
     }
 
     @Operation(summary = "Exclui um usuario por ID")

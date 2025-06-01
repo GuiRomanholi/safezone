@@ -40,8 +40,8 @@ public class UsuarioService {
     }
 
     @Transactional
-    @CacheEvict(value = "usuarios", allEntries = true)
-    public Usuario updateUsuario(Long id, Usuario usuario) {
+    @CachePut(value = "usuarios", key = "#result.id")
+    public Usuario updateUsuario(Long id, Usuario usuarioAtualizado) {
         Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
         if (usuarioOptional.isEmpty()) {
             return null;
@@ -49,13 +49,15 @@ public class UsuarioService {
 
         Usuario usuarioExistente = usuarioOptional.get();
 
-        usuario.setId(id);
+        usuarioAtualizado.setId(id);
 
-        if (!usuario.getSenha().equals(usuarioExistente.getSenha())) {
-            usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
+        if (!passwordEncoder.matches(usuarioAtualizado.getSenha(), usuarioExistente.getSenha())) {
+            usuarioAtualizado.setSenha(passwordEncoder.encode(usuarioAtualizado.getSenha()));
+        } else {
+            usuarioAtualizado.setSenha(usuarioExistente.getSenha());
         }
 
-        return usuarioRepository.save(usuario);
+        return usuarioRepository.save(usuarioAtualizado);
     }
 
     @Transactional
