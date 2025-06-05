@@ -8,6 +8,7 @@ import org.springframework.cache.annotation.EnableCaching;
 
 
 //http://localhost:8081/swagger-ui/index.html
+//http://52.168.182.169:8081/swagger-ui/index.html
 @SpringBootApplication
 @EnableCaching
 @OpenAPIDefinition(info =
