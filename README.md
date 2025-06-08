@@ -71,13 +71,14 @@ Além disso, **os Alertas só são gerados a partir das Leituras**. Portanto, pa
 - `PUT /leituras/{id}` – Atualiza uma leitura existente  
 
 ## Rotas recomendadas para o Teste:
-- `POST /usuario` – Cadastro de usuário
+- `POST /auth/register` – Cadastro de usuário
   ```json
   {
    "email": "robertolima@gmail.com",
    "senha": "Roberto123",
    "role": "ADMIN"
   }
+- Agora no `/auth/login` coloque seu email e senha e valide o token
 - `GET /usuario` – Lista de usuários
 - `GET /usuario/{id}` – Detalhes de um usuário
 - `DELETE /usuario/{id}` – Remove um usuário
