@@ -163,21 +163,24 @@ Se você for alterar o usuario que está logado no momento terá que logar de no
 # 🐳 Parte 2: DevOps — Containerização da API
 
 ## 🎥 Link do Vídeo
-[Link do Video](https://www.youtube.com/watch?v=GOuvrEtKBo4)
+[Link do Video](https://www.youtube.com/watch?v=B6S2-qtuHmQ)
 
-**OndeTáMoto?** é uma solução IoT desenvolvida para a empresa **Mottu**, especializada em motofrete, com o objetivo de otimizar o controle de entrada, saída e localização de motos dentro da garagem da empresa.
+**SafeZone** é uma solução IoT desenvolvida para ajudar a combater **desastres naturais**, com o objetivo de fazer leituras periodicas sobre a temperatura e a umidade, gerando alertas com nível de criticidade e uma descrição explicativa.
 
 ## 🔍 Sobre o Projeto
+A dinâmica do SafeZone é simples e eficiente: sensores de campo são instalados com identificação única e coordenadas geográficas precisas. Eles capturam periodicamente informações como temperatura, umidade e localização, enviando os dados para um servidor central.
 
-A dinâmica do sistema é simples, porém poderosa: cada moto da frota é equipada com uma tag inteligente, que funciona como um identificador exclusivo. Assim, toda movimentação é registrada instantaneamente, sem necessidade de intervenção manual.
+Essas informações são armazenadas em uma base de dados estruturada, permitindo tanto a análise em tempo real quanto o acesso ao histórico de variações ambientais. Em situações críticas, como alta temperatura ou umidade extremamente baixa, o sistema gera automaticamente alertas com nível de criticidade e descrição explicativa, auxiliando na rápida tomada de decisões.
 
-Esses dados são enviados para um aplicativo mobile, que centraliza todas as informações em uma interface amigável. A equipe da Mottu pode, com poucos toques na tela, visualizar o status de cada moto, saber onde ela está estacionada, identificar quais estão dentro ou fora da garagem e até categorizá-las conforme sua finalidade ou situação atual.
 ## 📱 Funcionalidades
 
-- Monitoramento em tempo real das motos da garagem
-- Visualização via aplicativo mobile
-- Identificação das motos com tags inteligentes
-- Categorização por status ou função
+- ✅ Monitoramento ambiental contínuo via sensores IoT  
+- 🌡️ Coleta de dados como temperatura, umidade e localização geográfica  
+- 📦 Armazenamento estruturado e análise histórica de dados  
+- 🚨 Geração automática de alertas em situações de risco  
+- 🌍 Visualização de informações em **mapas interativos** e **gráficos dinâmicos**  
+- 🔐 Controle de acesso para usuários e administradores via painel web  
+- 🔋 Sensores otimizados para ambientes remotos com **energia solar** e transmissão em intervalos programados 
 
 ### Build e execução
 
@@ -188,19 +191,15 @@ Esses dados são enviados para um aplicativo mobile, que centraliza todas as inf
 
 2. **Construa a imagem Docker:**
     ```sh
-    docker build -t ondetamoto-app .
+    docker build -t safezone-app .
     ```
 
 3. **Rode o container:**
     ```sh
-    docker run -d -p 8080:8080 --name ondetamoto-app ondetamoto-app
+    docker run -d -p 8081:8081 --name safezone-app safezone-app
     ```
 
-4. **Acesse a aplicação:**
-    - [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
-    - [http://localhost:8080/h2-console](http://localhost:8080/h2-console)
-      - JDBC URL: jdbc:h2:mem:testdb
-      - User Name: sa
-      - Password: deixar em branco
+4. **Acesse a aplicação deployada via Swagger:**
+    [http://52.168.182.169:8081/swagger-ui.html](http://52.168.182.169:8081/swagger-ui/index.html)
 
 ---
