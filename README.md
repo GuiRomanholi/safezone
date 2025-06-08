@@ -26,6 +26,10 @@ A API do projeto pode ser acessada via localhost no Swagger na rota:
 A API do projeto deployado via Swagger na rota:
 
 [http://52.168.182.169:8081/swagger-ui.html](http://52.168.182.169:8081/swagger-ui/index.html)
+## ⚠️ Atenção
+O projeto está conectado com um Banco de Dados Oracle criado em uma vm, se quiser usar o seu banco de dados para rodar o projeto terá que descomentar as linhas 5,6 e 7 e comentar as linhas 13, 14 e 15, 
+além de mudar a linha 23 para spring.jpa.hibernate.ddl-auto=create-drop, e assim ele irá criar as tabelas, mas tome cuidado pois quando ele cria pela primeira vez acontece um erro no terminal e então você terá que rodar de novo,
+ou seja eu recomendo que teste direto como está sem mudar o application.properties.
 
 ## ⚠️ Atenção Importante
 
